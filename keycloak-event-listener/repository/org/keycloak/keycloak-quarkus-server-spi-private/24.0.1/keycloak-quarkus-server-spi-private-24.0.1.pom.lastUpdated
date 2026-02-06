@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Feb 04 10:13:40 CET 2026
+https\://repo1.maven.org/maven2/.error=
+https\://nexus.cicd.portit.io/repository/portit-maven/.error=Could not transfer artifact org.keycloak\:keycloak-quarkus-server-spi-private\:pom\:24.0.1 from/to portit-maven (https\://nexus.cicd.portit.io/repository/portit-maven/)\: nexus.cicd.portit.io
+https\://repo1.maven.org/maven2/.lastUpdated=1770196420091
+@default-portit-maven-https\://nexus.cicd.portit.io/repository/portit-maven/.lastUpdated=1770196419985

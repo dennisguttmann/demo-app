@@ -1,0 +1,34 @@
+{
+  "realm": "mock-idp",
+  "enabled": true,
+  "sslRequired": "none",
+
+  "clients": [
+    {
+      "clientId": "mock-idp-client",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "redirectUris": [
+        "http://keycloak:8080/realms/demo/broker/mock-idp/endpoint"
+      ]
+    }
+  ],
+
+  "users": [
+    {
+      "username": "mockuser",
+      "enabled": true,
+      "firstName": "Mock",
+      "lastName": "User",
+      "email": "mock@demo.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

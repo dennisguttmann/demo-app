@@ -1,0 +1,87 @@
+{
+  "realm": "demo",
+  "enabled": true,
+  "supportedLocales": ["en"],
+  "defaultLocale": "en",
+  "sslRequired": "none",
+
+  "eventsEnabled": true,
+  "eventsListeners": [
+    "demo-event-listener"
+  ],
+
+  "attributes": {
+    "frontendUrl": "http://keycloak:8080"
+  },
+
+  "identityProviders": [
+    {
+      "alias": "mock-idp",
+      "displayName": "Mock Identity",
+      "providerId": "keycloak-oidc",
+      "enabled": true,
+      "trustEmail": true,
+      "storeToken": true,
+      "firstBrokerLoginFlowAlias": "first broker login",
+
+      "config": {
+        "authorizationUrl": "http://keycloak:8080/realms/mock-idp/protocol/openid-connect/auth",
+        "tokenUrl": "http://keycloak:8080/realms/mock-idp/protocol/openid-connect/token",
+        "userInfoUrl": "http://keycloak:8080/realms/mock-idp/protocol/openid-connect/userinfo",
+        "logoutUrl": "http://keycloak:8080/realms/mock-idp/protocol/openid-connect/logout",
+        "issuer": "http://keycloak:8080/realms/mock-idp",
+        "clientId": "mock-idp-client",
+        "defaultScope": "openid profile email",
+        "useJwksUrl": "false",
+        "validateSignature": "false"
+      }
+    }
+  ],
+
+  "clients": [
+    {
+      "clientId": "demo-app",
+      "name": "Demo Application",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "redirectUris": [
+        "http://localhost:8088/login/oauth2/code/keycloak",
+        "http://localhost:8088/*"
+      ],
+      "webOrigins": ["http://localhost:8080", "http://localhost:8088", "*"],
+      "protocolMappers": [
+        {
+          "name": "demo-attr-mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "demo-attr",
+            "claim.name": "demo-attr",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "test",
+          "temporary": false
+        }
+      ],
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "testuser@demo.com",
+      "requiredActions": []
+    }
+  ]
+}

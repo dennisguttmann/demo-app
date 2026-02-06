@@ -1,0 +1,70 @@
+networks:
+  demo-network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: kc-postgres
+    networks:
+      - demo-network
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: keycloak
+    networks:
+      - demo-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME_URL: http://keycloak:8080
+      KC_HOSTNAME_ADMIN_URL: http://keycloak:8080
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-demo.json:/opt/keycloak/data/import/realm-demo.json
+      - ./keycloak/providers:/opt/keycloak/providers
+      - ./keycloak/mock-idp-realm.json:/opt/keycloak/data/import/mock-idp-realm.json
+    healthcheck:
+      test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'HEAD /health/ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && grep -q 'HTTP/1.1 200' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  java-app:
+    build: .
+    container_name: java-app
+    networks:
+      - demo-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "8088:8088"
+      - "8787:8787"
+    environment:
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/demo
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID: demo-app
