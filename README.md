@@ -77,9 +77,9 @@ docker-compose restart keycloak
 4. Redirect back to app with user data
 
 
-### Reseting session
+### Resetting session
 
-For reseting the session you can just stop and start the containers again
+For resetting the session you can just stop and start the containers again
 
 ```bash
 docker-compose down 
