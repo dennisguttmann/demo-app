@@ -76,6 +76,17 @@ docker-compose restart keycloak
 3. Login with: `testuser` / `test`
 4. Redirect back to app with user data
 
+
+### Reseting session
+
+For reseting the session you can just stop and start the containers again
+
+```bash
+docker-compose down 
+docker-compose up 
+```
+
+
 ### Mock Identity Provider Login
 1. Navigate to http://localhost:8088
 2. Click "Mock Identity" on Keycloak login page
