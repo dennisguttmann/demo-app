@@ -1,4 +1,4 @@
-# Keycloak Spring Boot Demo - Senior Java Backend Test
+# Keycloak Spring Boot Demo - Demonstration
 
 A complete demonstration project showing OAuth2/OIDC integration with Keycloak, including remote debugging capabilities and custom event listeners.
 
